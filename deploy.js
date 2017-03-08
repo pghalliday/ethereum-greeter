@@ -35,7 +35,7 @@ async function deployContract({
   console.log('deploy contract');
   contractFactory.new(...contractArgs, {
     from: coinbase,
-    data: code,
+    data: '0x' + code,
     gas,
   }, async (error, contract) => {
     if (error) {

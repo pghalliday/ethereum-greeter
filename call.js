@@ -1,4 +1,3 @@
-const Web3 = require('web3');
 const fs = require('fs');
 const path = require('path');
 const promisify = require('es6-promisify');

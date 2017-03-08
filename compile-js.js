@@ -1,16 +1,15 @@
+const solc = require('solc');
 const fs = require('fs');
 const path = require('path');
 const promisify = require('es6-promisify');
 const rimraf = require('rimraf');
 const mkdirp = require('mkdirp');
 const constants = require('./lib/constants');
-const web3 = require('./lib/web3');
 
 const primraf = promisify(rimraf);
 const pmkdirp = promisify(mkdirp);
 const preadFile = promisify(fs.readFile);
 const pwriteFile = promisify(fs.writeFile);
-const pcompile = promisify(web3.eth.compile.solidity, web3.eth.compile);
 
 async function compileContract({
   buildDir,
@@ -25,14 +24,12 @@ async function compileContract({
   console.log('read contract source');
   const contractSource = await preadFile(contractFile, 'utf8');
   console.log(`compiling: ${contractFile}`);
-  const compiled = await pcompile(contractSource);
-  const contractCompiled = compiled[`<stdin>:${contractName}`];
+  const compiled = solc.compile(contractSource, 1);
+  const contractCompiled = compiled.contracts[`:${contractName}`];
   console.log('write abi');
-  await pwriteFile(abiFile, JSON.stringify(contractCompiled.info.abiDefinition));
+  await pwriteFile(abiFile, contractCompiled.interface);
   console.log('write code');
-  // strip the '0x' prefix from the code to be consistent with other
-  // compiler implementations
-  await pwriteFile(codeFile, contractCompiled.code.substring(2));
+  await pwriteFile(codeFile, contractCompiled.bytecode);
   console.log(`done`);
 }
 
