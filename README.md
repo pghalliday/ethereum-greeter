@@ -1,4 +1,4 @@
-# ethereum-test
+# ethereum-greeter
 
 ## Prerequistes
 
