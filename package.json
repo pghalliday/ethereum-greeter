@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "es6-promisify": "^5.0.0",
+    "mkdirp": "^0.5.1",
+    "rimraf": "^2.6.1",
     "web3": "^0.18.2"
   }
 }

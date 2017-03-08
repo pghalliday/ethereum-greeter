@@ -1,25 +1,15 @@
 const Web3 = require('web3');
 const fs = require('fs');
 const path = require('path');
-const net = require('net');
 const promisify = require('es6-promisify');
-
-const provider = `${__dirname}/data/geth.ipc`;
-const addressFile = `${__dirname}/data/greeter.address`;
-const abiFile = `${__dirname}/data/greeter.abi`;
-const passPhraseFile = path.join(__dirname, '.pass-phrase');
-
-console.log(`Create web3 provider: ${provider}`);
-const web3 = new Web3(new Web3.providers.IpcProvider(provider, net));
+const constants = require('./lib/constants');
+const web3 = require('./lib/web3');
+const getFirstLine = require('./lib/get-first-line');
 
 const preadFile = promisify(fs.readFile);
 const pgetCoinbase = promisify(web3.eth.getCoinbase, web3.eth);
 const punlockAccount = promisify(web3.personal.unlockAccount, web3.personal);
 const pgetCode = promisify(web3.eth.getCode, web3.eth);
-
-function getFirstLine(text) {
-  return text.slice(0, text.indexOf('\n'));
-}
 
 async function killContract({
   passPhraseFile,
@@ -54,7 +44,7 @@ async function killContract({
 }
 
 killContract({
-  passPhraseFile,
-  addressFile,
-  abiFile,
+  passPhraseFile: constants.passPhraseFile,
+  addressFile: constants.addressFile,
+  abiFile: constants.abiFile,
 }).catch((error) => console.error(error.stack));

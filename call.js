@@ -1,18 +1,9 @@
 const Web3 = require('web3');
 const fs = require('fs');
 const path = require('path');
-const net = require('net');
 const promisify = require('es6-promisify');
-
-const provider = `${__dirname}/data/geth.ipc`;
-const addressFile = `${__dirname}/data/greeter.address`;
-const abiFile = `${__dirname}/data/greeter.abi`;
-const method = 'greet';
-const args = [];
-
-
-console.log(`Create web3 provider: ${provider}`);
-const web3 = new Web3(new Web3.providers.IpcProvider(provider, net));
+const constants = require('./lib/constants');
+const web3 = require('./lib/web3');
 
 const preadFile = promisify(fs.readFile);
 
@@ -37,10 +28,10 @@ async function callContract({
 }
 
 callContract({
-  addressFile,
-  abiFile,
-  method,
-  args,
+  addressFile: constants.addressFile,
+  abiFile: constants.abiFile,
+  method: constants.method,
+  args: constants.args,
 }).then((result) => {
   console.log(`result: ${result}`);
 }).catch((error) => console.error(error.stack));
