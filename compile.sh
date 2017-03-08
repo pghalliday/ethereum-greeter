@@ -6,4 +6,4 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 rm -rf $DIR/build
 mkdir -p $DIR/build
 cd $DIR
-solc --bin --abi --optimize -o $DIR/build greeter.sol
+solc --gas --bin --abi --optimize -o $DIR/build greeter.sol
